@@ -1,4 +1,4 @@
-# checkers-in-c
+# Checkers in C language
 Game of Checkers I made in C without any special libraries or anything too complicated.
 
 Just download, compile and enjoy ^^
