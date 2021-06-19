@@ -34,21 +34,21 @@ char tabuleiroreset[12][12]= //Para reiniciar o jogo
     {' ', ' ', '1', '2', '3', '4', '5', '6', '7', '8', ' ', ' '}  //11
 }; // 0    1    2    3    4    5    6    7    8    9   10   11
 
-int sair=0; //Variável global para sair do programa
+int sair = 0; //Variável global para sair do programa
 char anterior; //Variável global que armazena a peça que foi jogada anteriormente, impedindo que o mesmo tipo seja jogado duas vezes
 
-int pontospretas=0, pontosbrancas=0;
+int pontospretas = 0, pontosbrancas = 0;
 int contpretas, contbrancas;
 
-struct posicao_tabuleiro //Struct global para as posicoes no tabuleiro
+typedef struct posicao_tabuleiro //Struct global para as posicoes no tabuleiro
 {
 	int xi;
 	int yi;
 	int xf;
 	int yf;
-};
+} posicao_tabuleiro;
 
-struct posicao_tabuleiro posicao; //Definicao global de um variavel "posicao" do tipo "posicao_tabuleiro"
+posicao_tabuleiro posicao; //Definicao global de um variavel "posicao" do tipo "posicao_tabuleiro"
 
 /*---------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------*/
@@ -58,18 +58,18 @@ struct posicao_tabuleiro posicao; //Definicao global de um variavel "posicao" do
 
 void pontuacao()
 {
-	pontosbrancas=25*(12-contpretas);
-	pontospretas=25*(12-contbrancas);
+	pontosbrancas = 25 * (12 - contpretas);
+	pontospretas = 25 * (12 - contbrancas);
 	printf("\n\t     PRETAS: %d       BRANCAS: %d\n\n", pontospretas, pontosbrancas);
 }
 
 void exibirMatriz() //Função que exibe a matriz Tabuleiro atualizada
 {
 	int i, j;
-	for(i=0; i<12; i++)
+	for(i = 0; i < 12; i++)
 	{
 		printf("\t");
-		for(j=0; j<12; j++)
+		for(j = 0; j < 12; j++)
 		{
 			printf(" %c ", tabuleiro[i][j]);
 		}
@@ -83,30 +83,30 @@ void exibirMatriz() //Função que exibe a matriz Tabuleiro atualizada
 /*---------------------------------------------------------------------------------*/
 /*---------------------------------------------------------------------------------*/
 
-int damabranca=0, damapreta=0;
+int damabranca = 0, damapreta = 0;
 void checaDama(int xf, int yf) //Checa se ha alguma peça que possa se tornar dama
 {
 	int j;
-	for(j=0; j<12; j++)
+	for(j = 0; j < 12; j++)
 	{
 		if(tabuleiro[2][j]=='P')
 		{
-			damapreta=1;
+			damapreta = 1;
 		}
 		if(tabuleiro[9][j]=='B')
 		{
-			damabranca=1;
+			damabranca = 1;
 		}
 	}
 
-	if(damapreta==1 && tabuleiro[xf][yf]=='P' && xf==2)
+	if(damapreta == 1 && tabuleiro[xf][yf] == 'P' && xf == 2)
 	{
-		tabuleiro[xf][yf]='K';
+		tabuleiro[xf][yf] = 'K';
 		return;
 	}
-	if(damabranca==1 && tabuleiro[xf][yf]=='B' && xf==9)
+	if(damabranca == 1 && tabuleiro[xf][yf] == 'B' && xf == 9)
 	{
-		tabuleiro[xf][yf]='W';
+		tabuleiro[xf][yf] = 'W';
 		return;
 	}
 }
@@ -115,15 +115,15 @@ void moveDama(int xi, int yi, int xf, int yf) //Faz a movimentacao das damas
 {
 	int i, j;
 
-	if(xf>xi && yf>yi) //Andar de cima para baixo, da esquerda para a direita
+	if(xf > xi && yf > yi) //Andar de cima para baixo, da esquerda para a direita
 	{
-		if(xf==xi+1 && yf==yi+1) //Andar uma casa
+		if(xf == xi + 1 && yf == yi + 1) //Andar uma casa
 		{
-			if(tabuleiro[xi+1][yi+1]=='.')
+			if(tabuleiro[xi + 1][yi + 1] == '.')
 			{
-				anterior=tabuleiro[xi][yi];
-				tabuleiro[xi+1][yi+1]=tabuleiro[xi][yi];
-				tabuleiro[xi][yi]='.';
+				anterior = tabuleiro[xi][yi];
+				tabuleiro[xi + 1][yi + 1] = tabuleiro[xi][yi];
+				tabuleiro[xi][yi] = '.';
 				return;
 			}
 			else
@@ -134,14 +134,14 @@ void moveDama(int xi, int yi, int xf, int yf) //Faz a movimentacao das damas
 				return;
 			}
 		}
-		else if(xf==xi+2 && yf==yi+2) //Andar duas casas e comer
+		else if(xf == xi + 2 && yf == yi + 2) //Andar duas casas e comer
 		{
-			if(tabuleiro[xi+2][yi+2]=='.') //Checa se há alguma peça no destino e substitui a peça que estiver no espaço no meio em um '.'
+			if(tabuleiro[xi + 2][yi + 2] == '.') //Checa se há alguma peça no destino e substitui a peça que estiver no espaço no meio em um '.'
 			{
-				anterior=tabuleiro[xi][yi];
-				tabuleiro[xf][yf]=tabuleiro[xi][yi];
-				tabuleiro[xi+1][yi+1]='.';
-				tabuleiro[xi][yi]='.';
+				anterior = tabuleiro[xi][yi];
+				tabuleiro[xf][yf] = tabuleiro[xi][yi];
+				tabuleiro[xi + 1][yi + 1] = '.';
+				tabuleiro[xi][yi] = '.';
 				return;
 			}
 			else
@@ -154,34 +154,34 @@ void moveDama(int xi, int yi, int xf, int yf) //Faz a movimentacao das damas
 		}
 		else //Andar mais de duas casas
 		{
-			j=yi+1;
-			for(i=xi+1; i<=xf; i++)
+			j = yi + 1;
+			for(i = xi + 1; i <= xf; i++)
 			{
-				if(tabuleiro[i][j]!='.')
+				if(tabuleiro[i][j] != '.')
 				{
-					anterior=tabuleiro[xi][yi];
-					tabuleiro[i-1][j-1]=tabuleiro[xi][yi];
-					tabuleiro[xi][yi]='.';
+					anterior = tabuleiro[xi][yi];
+					tabuleiro[i - 1][j - 1] = tabuleiro[xi][yi];
+					tabuleiro[xi][yi] = '.';
 					return;
 				}
 				j++;
 			}
-			anterior=tabuleiro[xi][yi];
-			tabuleiro[xf][yf]=tabuleiro[xi][yi];
-			tabuleiro[xi][yi]='.';
+			anterior = tabuleiro[xi][yi];
+			tabuleiro[xf][yf] = tabuleiro[xi][yi];
+			tabuleiro[xi][yi] = '.';
 			return;
 		}
 	} //Fecha movimentos de cima para baixo, da esquerda para a direita
 
-	if(xf>xi && yf<yi) //Andar de cima para baixo, da direita para a esquerda
+	if(xf > xi && yf < yi) //Andar de cima para baixo, da direita para a esquerda
 	{
-		if(xf==xi+1 && yf==yi-1) //Andar uma casa
+		if(xf == xi + 1 && yf == yi - 1) //Andar uma casa
 		{
-			if(tabuleiro[xi+1][yi-1]=='.')
+			if(tabuleiro[xi + 1][yi - 1] == '.')
 			{
-				anterior=tabuleiro[xi][yi];
-				tabuleiro[xi+1][yi-1]=tabuleiro[xi][yi];
-				tabuleiro[xi][yi]='.';
+				anterior = tabuleiro[xi][yi];
+				tabuleiro[xi + 1][yi - 1] = tabuleiro[xi][yi];
+				tabuleiro[xi][yi] = '.';
 				return;
 			}
 			else
@@ -192,14 +192,14 @@ void moveDama(int xi, int yi, int xf, int yf) //Faz a movimentacao das damas
 				return;
 			}
 		}
-		else if(xf==xi+2 && yf==yi-2) //Andar duas casa e comer peca
+		else if(xf == xi + 2 && yf == yi - 2) //Andar duas casa e comer peca
 		{
-			if(tabuleiro[xi+2][yi-2]=='.') //Checa se há alguma peça no destino e substitui a peça que estiver no espaço no meio em um '.'
+			if(tabuleiro[xi + 2][yi - 2] == '.') //Checa se há alguma peça no destino e substitui a peça que estiver no espaço no meio em um '.'
 			{
-				anterior=tabuleiro[xi][yi];
-				tabuleiro[xf][yf]=tabuleiro[xi][yi];
-				tabuleiro[xi+1][yi-1]='.';
-				tabuleiro[xi][yi]='.';
+				anterior = tabuleiro[xi][yi];
+				tabuleiro[xf][yf] = tabuleiro[xi][yi];
+				tabuleiro[xi + 1][yi - 1] = '.';
+				tabuleiro[xi][yi] = '.';
 				return;
 			}
 			else
@@ -212,34 +212,34 @@ void moveDama(int xi, int yi, int xf, int yf) //Faz a movimentacao das damas
 		}
 		else //Andar mais de duas casas
 		{
-			j=yi-1;
-			for(i=xi+1; i<=xf; i++)
+			j = yi - 1;
+			for(i = xi + 1; i <= xf; i++)
 			{
-				if(tabuleiro[i][j]!='.')
+				if(tabuleiro[i][j] != '.')
 				{
-					anterior=tabuleiro[xi][yi];
-					tabuleiro[i-1][j+1]=tabuleiro[xi][yi];
-					tabuleiro[xi][yi]='.';
+					anterior = tabuleiro[xi][yi];
+					tabuleiro[i - 1][j + 1] = tabuleiro[xi][yi];
+					tabuleiro[xi][yi] = '.';
 					return;
 				}
 				j--;
 			}
-			anterior=tabuleiro[xi][yi];
-			tabuleiro[xf][yf]=tabuleiro[xi][yi];
-			tabuleiro[xi][yi]='.';
+			anterior = tabuleiro[xi][yi];
+			tabuleiro[xf][yf] = tabuleiro[xi][yi];
+			tabuleiro[xi][yi] = '.';
 			return;
 		}
 	} //Fecha movimentos de cima para baixo, da direita para a esquerda
 
-	if(xf<xi && yf>yi) //De baixo para cima, da esquerda para a direita
+	if(xf < xi && yf > yi) //De baixo para cima, da esquerda para a direita
 	{
-		if(xf==xi-1 && yf==yi+1) //Andar uma casa
+		if(xf == xi - 1 && yf == yi + 1) //Andar uma casa
 		{
-			if(tabuleiro[xi-1][yi+1]=='.')
+			if(tabuleiro[xi - 1][yi + 1] == '.')
 			{
-				anterior=tabuleiro[xi][yi];
-				tabuleiro[xi-1][yi+1]=tabuleiro[xi][yi];
-				tabuleiro[xi][yi]='.';
+				anterior = tabuleiro[xi][yi];
+				tabuleiro[xi - 1][yi + 1] = tabuleiro[xi][yi];
+				tabuleiro[xi][yi] = '.';
 				return;
 			}
 			else
@@ -250,14 +250,14 @@ void moveDama(int xi, int yi, int xf, int yf) //Faz a movimentacao das damas
 				return;
 			}
 		}
-		else if(xf==xi-2 && yf==yi+2) //Andar duas casa e comer peca
+		else if(xf == xi - 2 && yf == yi + 2) //Andar duas casa e comer peca
 		{
-			if(tabuleiro[xi-2][yi+2]=='.') //Checa se há alguma peça no destino e substitui a peça que estiver no espaço no meio em um '.'
+			if(tabuleiro[xi - 2][yi + 2] == '.') //Checa se há alguma peça no destino e substitui a peça que estiver no espaço no meio em um '.'
 			{
-				anterior=tabuleiro[xi][yi];
-				tabuleiro[xf][yf]=tabuleiro[xi][yi];
-				tabuleiro[xi-1][yi+1]='.';
-				tabuleiro[xi][yi]='.';
+				anterior = tabuleiro[xi][yi];
+				tabuleiro[xf][yf] = tabuleiro[xi][yi];
+				tabuleiro[xi - 1][yi + 1] = '.';
+				tabuleiro[xi][yi] = '.';
 				return;
 			}
 			else
@@ -270,34 +270,34 @@ void moveDama(int xi, int yi, int xf, int yf) //Faz a movimentacao das damas
 		}
 		else //Andar mais de duas casas
 		{
-			j=yi+1;
-			for(i=xi-1; i>=xf; i--)
+			j = yi + 1;
+			for(i = xi - 1; i >= xf; i--)
 			{
-				if(tabuleiro[i][j]!='.')
+				if(tabuleiro[i][j] != '.')
 				{
-					anterior=tabuleiro[xi][yi];
-					tabuleiro[i+1][j-1]=tabuleiro[xi][yi];
-					tabuleiro[xi][yi]='.';
+					anterior = tabuleiro[xi][yi];
+					tabuleiro[i + 1][j - 1] = tabuleiro[xi][yi];
+					tabuleiro[xi][yi] = '.';
 					return;
 				}
 				j++;
 			}
-			anterior=tabuleiro[xi][yi];
-			tabuleiro[xf][yf]=tabuleiro[xi][yi];
-			tabuleiro[xi][yi]='.';
+			anterior = tabuleiro[xi][yi];
+			tabuleiro[xf][yf] = tabuleiro[xi][yi];
+			tabuleiro[xi][yi] = '.';
 			return;
 		}
 	} //Fecha movimentos de baixo para cima, da esquerda para a direita
 
-	if(xf<xi && yf<yi) //De baixo para cima, da direita para a esquerda
+	if(xf < xi && yf < yi) //De baixo para cima, da direita para a esquerda
 	{
-		if(xf==xi-1 && yf==yi-1) //Andar uma casa
+		if(xf == xi - 1 && yf == yi - 1) //Andar uma casa
 		{
-			if(tabuleiro[xi-1][yi-1]=='.')
+			if(tabuleiro[xi - 1][yi - 1] == '.')
 			{
-				anterior=tabuleiro[xi][yi];
-				tabuleiro[xi-1][yi-1]=tabuleiro[xi][yi];
-				tabuleiro[xi][yi]='.';
+				anterior = tabuleiro[xi][yi];
+				tabuleiro[xi - 1][yi - 1] = tabuleiro[xi][yi];
+				tabuleiro[xi][yi] = '.';
 				return;
 			}
 			else
@@ -308,14 +308,14 @@ void moveDama(int xi, int yi, int xf, int yf) //Faz a movimentacao das damas
 				return;
 			}
 		}
-		else if(xf==xi-2 && yf==yi-2) //Andar duas casa e comer peca
+		else if(xf == xi - 2 && yf == yi - 2) //Andar duas casa e comer peca
 		{
-			if(tabuleiro[xi-2][yi-2]=='.') //Checa se há alguma peça no destino e substitui a peça que estiver no espaço no meio em um '.'
+			if(tabuleiro[xi - 2][yi - 2] == '.') //Checa se há alguma peça no destino e substitui a peça que estiver no espaço no meio em um '.'
 			{
-				anterior=tabuleiro[xi][yi];
-				tabuleiro[xf][yf]=tabuleiro[xi][yi];
-				tabuleiro[xi-1][yi-1]='.';
-				tabuleiro[xi][yi]='.';
+				anterior = tabuleiro[xi][yi];
+				tabuleiro[xf][yf] = tabuleiro[xi][yi];
+				tabuleiro[xi - 1][yi - 1] = '.';
+				tabuleiro[xi][yi] = '.';
 				return;
 			}
 			else
@@ -328,21 +328,21 @@ void moveDama(int xi, int yi, int xf, int yf) //Faz a movimentacao das damas
 		}
 		else //Andar mais de duas casas
 		{
-			j=yi-1;
-			for(i=xi-1; i>=xf; i--)
+			j = yi - 1;
+			for(i = xi - 1; i >= xf; i--)
 			{
-				if(tabuleiro[i][j]!='.')
+				if(tabuleiro[i][j] != '.')
 				{
-					anterior=tabuleiro[xi][yi];
-					tabuleiro[i+1][j+1]=tabuleiro[xi][yi];
-					tabuleiro[xi][yi]='.';
+					anterior = tabuleiro[xi][yi];
+					tabuleiro[i + 1][j + 1] = tabuleiro[xi][yi];
+					tabuleiro[xi][yi] = '.';
 					return;
 				}
 				j--;
 			}
-			anterior=tabuleiro[xi][yi];
-			tabuleiro[xf][yf]=tabuleiro[xi][yi];
-			tabuleiro[xi][yi]='.';
+			anterior = tabuleiro[xi][yi];
+			tabuleiro[xf][yf] = tabuleiro[xi][yi];
+			tabuleiro[xi][yi] = '.';
 			return;
 		}
 	}
